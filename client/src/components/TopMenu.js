@@ -8,8 +8,15 @@ import {Collapse,Navbar,NavbarToggler,NavbarBrand,Nav,NavItem,NavLink} from 'rea
     Create a top menu using reactstrap.
 */
 const TopMenu = (props) => {
+
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
+
+//   getData(){
+//     let data = sessionStorage.getItem('mySessionStorageData');
+//     data = JSON.parse(data);
+//     console.log(data.firstName);
+// };
   return (
     <div>
       <Navbar color="light" light expand="md">
@@ -24,7 +31,7 @@ const TopMenu = (props) => {
             </NavItem>
             <NavItem>
               <NavLink>
-                  <Link to="/friend">Room</Link>
+                  <Link to="/gameroom">Room</Link>
               </NavLink>
             </NavItem>
             <NavItem>
@@ -37,6 +44,7 @@ const TopMenu = (props) => {
                   <Link to="/profile/">Profile</Link>
               </NavLink>
             </NavItem>
+           
           </Nav>
         </Collapse>
       </Navbar>
@@ -45,3 +53,4 @@ const TopMenu = (props) => {
 }
 //Export Menu component
 export default TopMenu;
+

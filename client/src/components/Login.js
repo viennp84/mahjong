@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {Link, Redirect} from "react-router-dom";
 import { Button, Card } from 'reactstrap';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
+import {userContext} from '../libs/userContext';
 /*  Vien Nguyen
     CST-451 Mahjong Game Online
     12/12/2020
@@ -11,14 +12,28 @@ import { AvForm, AvField } from 'availity-reactstrap-validation';
 */
 class Login extends React.Component{
     constructor(props){
+        
         super(props);
         this.state={
-            message: ''
+            message: '',
+            user: null
         };
         this.usernameChangeHandler = this.usernameChangeHandler.bind(this);
         this.passwordChangeHandler = this.passwordChangeHandler.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    setData(){
+        let obj = {name: 'vien', age: 30, email: 'vien@gmail.com'}
+        sessionStorage.setItem('mySessionStorageData', JSON.stringify(obj));
+    }
+
+    getData(){
+        let data = sessionStorage.getItem('mySessionStorageData');
+        data = JSON.parse(data);
+        console.log(data.name);
+    }
+
     //Update username from the control when state is changed.
     usernameChangeHandler(event){
         this.setState({username: event.target.value});
@@ -55,6 +70,9 @@ class Login extends React.Component{
                 //Set the redirect condition after logging in.
                 if(res.data.message.msg === "loggedin"){
                    this.setState({redirect: true})
+                   console.log(res.data.message.user)
+                   this.setState({user: res.data.message.user})
+                   sessionStorage.setItem('mySessionStorageData', JSON.stringify(res.data.message.user));
                 }
         })
         .catch((err)=>{
@@ -64,8 +82,11 @@ class Login extends React.Component{
     //Render the login form
     render(){
         const {redirect} = this.state;
+       
         //If user has logged in, redirect to home page.
         if (redirect) {
+            <userContext.Provider value={this.state.user} />
+
             return <Redirect to='/home/'/>;
         }
         //Generating the login form and validation on React-form
@@ -96,9 +117,18 @@ class Login extends React.Component{
                             Don't have an account? <Link to="/register/">Sign up</Link>
                         </p>
                     </AvForm>
+                    <button onClick={()=>this.setData()}></button>
+                    <button onClick={()=>this.getData()}></button>
                 </div>
+                
+                   
+              
         );
     }
 }
+
 //Export the login component.
 export default Login;
+
+
+ 

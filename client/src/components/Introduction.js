@@ -55,31 +55,31 @@ class Introduction extends React.Component {
             return (
                 <div className="Introduction center">
                     <h1 className="center">Welcome to Mahjong</h1>
-                    <p class="blocktext">{items.data.result.welcome}</p>
+                    <p className="blocktext">{items.data.result.welcome}</p>
                     <h2>Players</h2>
-                    <p class="blocktext">{items.data.result.players}</p>
+                    <p className="blocktext">{items.data.result.players}</p>
                     <h2>Components</h2>
                     <div className="mahjongset">
                         {<Img src={MahjongSet}/>}
                     </div>
-                    <p class="blocktext">{items.data.result.components}</p>
+                    <p className="blocktext">{items.data.result.components}</p>
                     <h2>Goal</h2>
-                    <p class="blocktext">{items.data.result.goal}</p>
+                    <p className="blocktext">{items.data.result.goal}</p>
                     <h2>Setup</h2>
-                    <p class="blocktext">{items.data.result.setup}</p>
+                    <p className="blocktext">{items.data.result.setup}</p>
                     <h2>Play</h2>
-                    <p class="blocktext">{items.data.result.play}</p>
+                    <p className="blocktext">{items.data.result.play}</p>
                     <h2>Kong</h2>
-                    <p class="blocktext">{items.data.result.kong}</p>
+                    <p className="blocktext">{items.data.result.kong}</p>
                     <h2>Hand End</h2>
-                    <p class="blocktext">{items.data.result.handend}</p>
+                    <p className="blocktext">{items.data.result.handend}</p>
                     <h2>Scoring</h2>
                     <Scoring/>
                     <h2>Game End</h2>
-                    <p class="blocktext">{items.data.result.gameend}</p>
+                    <p className="blocktext">{items.data.result.gameend}</p>
                     <h1> Additional Notes:</h1>
-                    <p class="blocktext">{items.data.result.additionalnote}</p>
-                    <h2>CHARLESTON:</h2><p class="blocktext">{items.data.result.charleston}</p>
+                    <p className="blocktext">{items.data.result.additionalnote}</p>
+                    <h2>CHARLESTON:</h2><p className="blocktext">{items.data.result.charleston}</p>
                 </div>
             );
         }

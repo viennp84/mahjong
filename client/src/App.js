@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/Login.css';
@@ -9,6 +9,8 @@ import Register from './components/Register';
 import Home from './components/Home';
 import Profile from './components/Profile';
 import TopMenu from './components/TopMenu';
+import Friend  from './components/Friend';
+
 
 //Import register component
 const RegisterForm = () => 
@@ -31,36 +33,43 @@ const ProfilePage = () =>
   <Profile/>
 </div>;
 
-
-
+const FriendPage = () => 
+<div className="Friend">
+  <Friend/>
+</div>;
 
 function App() {
   //Render the home page from the home component
-  
+ 
    return (
-    <Router>
-                         
-               <div>
-                    <TopMenu/>
-                </div> 
-      <Switch>
-        <div>
+   
+      <Router> 
+                
           <div>
-          <Route path="/" exact component={LoginForm} />
-          </div>
-
-          <div>
-          <Route path="/register/" component={RegisterForm} />
+            <TopMenu/>
           </div> 
-        
-          <Route path="/home/" component={HomePage} />
-
+        <Switch>
           <div>
-          <Route path="/profile/" component={ProfilePage} />
+            <div>
+            <Route path="/" exact component={LoginForm} />
+            </div>
+
+            <div>
+            <Route path="/register/" component={RegisterForm} />
+            </div> 
+          
+            <Route path="/home/" component={HomePage} />
+
+            <div>
+            <Route path="/profile/" component={ProfilePage} />
+            </div>
+            <div>
+            <Route path="/friend/" component={FriendPage} />
+            </div>
           </div>
-        </div>
-      </Switch>
-    </Router>
+        </Switch>
+      </Router>
+   
   );
 }
 export default App;

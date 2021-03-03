@@ -7,6 +7,28 @@ const multer = require('multer');
 const imageUploader = multer({ dest: 'images/' })
 const fs = require('fs');
 const path = require('path');
+var user= require('../models/user')
+const Nylas = require('nylas');
+
+Nylas.config({
+  clientId: '4zp9e9e81xbehojanc35bq3ye',
+  clientSecret: '230ea1pz1xjzyektxfsmallvg',
+});
+
+module.exports.inviteFriend = function (req, res) {
+  const nylas = Nylas.with('yBreaX0TbNkzx5ed6MN8igvljQZDfi');
+  const draft = nylas.drafts.build({
+    subject: 'With Love, from Nylas',
+    to: [{ name: 'My Nylas Friend', email: 'jim.nguyen083@gmail.com' }],
+    body: 'This email was sent using the Nylas email API. Visit https://nylas.com for details.'
+  });
+  // Send the draft
+  draft.send().then(message => {
+    console.log(`${message.id} was sent`);
+  });
+
+}
+
 
 /*Register business service, checking if the username or email already exist on the database.
 Insert register data into the users table*/
@@ -75,6 +97,7 @@ module.exports.login = function (req, res) {
   //Retrieve data from the request and assign value to the variables
   const username = req.body.user.username;
   const password = req.body.user.password;
+
   //The logic that it will check for the username first if it is existing on the database first
   //Select all fields of a record with username
   db.query("SELECT * FROM users WHERE username = ?", [username], (err, result) => {
@@ -86,13 +109,18 @@ module.exports.login = function (req, res) {
       bcrypt.compare(password, result[0].password, (err, response) => {
         //Respond back with an announcement that the user is logged in.
         if (response) {
+          //console.log(result);
+          const u = new user(result[0].userId, result[0].firstname, result[0].lastname, result[0].username, result[0].role, result[0].lastLogin, result[0].isActivated, result[0].email, result[0].phone);
+          //console.log(u);
+          req.session.user = u;
           //Update the last time the user logged in.
           db.query("UPDATE users SET lastLogin = ? WHERE userId = ?", [new Date(), result[0].userId], (err, result) => { });
           res.send({
             message: {
               //Provide a messege that user logged in and return a username
               msg: "loggedin",
-              username: result[0].username
+              username: result[0].username,
+              user: u
             }
           })
         }

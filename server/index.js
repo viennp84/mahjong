@@ -1,4 +1,5 @@
 const express = require('express');
+var session = require('client-sessions');
 //Require for crossplatform
 const cors = require("cors"); 
 const bodyParser = require('body-parser');
@@ -23,6 +24,15 @@ app.use([
       extended: true,
   })
 ]);
+app.use(session({
+  cookieName: 'session',
+  secret: 'viennguyen1212MahjongGame',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+  httpOnly: true,
+  secure: true,
+  ephemeral: true
+}));
 //Testing the service server
 app.get('/', function(request, response){
   response.send('Welcome to Mahjong Game');

@@ -32,6 +32,12 @@ class Profile extends React.Component {
             update: false,
         };
     }
+
+    getData(){
+        let data = sessionStorage.getItem('mySessionStorageData');
+        data = JSON.parse(data);
+        console.log(data.name);
+    }
     //Update firstname, lastname, email, phone when stage on controls are changed.
     //Update firstname
     firstNameChangeHandler(event) {
@@ -216,6 +222,7 @@ class Profile extends React.Component {
             //Render the personal profile page
             return (
                 <div className="container" style={{ paddingTop: 30 }}>
+                     <button onClick={()=>this.getData()}></button>
                     <Row>
                         <Col sm={12}>
                             <Card>

@@ -19,5 +19,8 @@ router.post('/updateProfile', controller.updateProfile);
 router.post('/avatar', controller.updateAvatar);
 //Get avatar image
 router.get('/avatar/:name', controller.getAvatar);
+//Send email via Nylas
+router.post('/invite', controller.inviteFriend);
+
 
 module.exports = router;
