@@ -16,16 +16,17 @@ Nylas.config({
 });
 
 module.exports.inviteFriend = function (req, res) {
-  const nylas = Nylas.with('yBreaX0TbNkzx5ed6MN8igvljQZDfi');
-  const draft = nylas.drafts.build({
-    subject: 'With Love, from Nylas',
-    to: [{ name: 'My Nylas Friend', email: 'jim.nguyen083@gmail.com' }],
-    body: 'This email was sent using the Nylas email API. Visit https://nylas.com for details.'
-  });
-  // Send the draft
-  draft.send().then(message => {
-    console.log(`${message.id} was sent`);
-  });
+  console.log(req.body.email);
+  // const nylas = Nylas.with('yBreaX0TbNkzx5ed6MN8igvljQZDfi');
+  // const draft = nylas.drafts.build({
+  //   subject: 'With Love, from Nylas',
+  //   to: [{ name: 'My Nylas Friend', email: 'jim.nguyen083@gmail.com' }],
+  //   body: 'This email was sent using the Nylas email API. Visit https://nylas.com for details.'
+  // });
+  // // Send the draft
+  // draft.send().then(message => {
+  //   console.log(`${message.id} was sent`);
+  // });
 
 }
 

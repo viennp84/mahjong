@@ -1,8 +1,11 @@
 import axios from 'axios';
+import '../styles/Introduction.css';
 import React, { Component } from 'react';
 import {Link, Redirect} from "react-router-dom";
 import { Button, Card } from 'reactstrap';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../styles/Profile.css';
 /*  Vien Nguyen
     CST-452 Mahjong Game Online
     Feb/18/2021
@@ -56,15 +59,14 @@ class Friend extends React.Component{
         }
         //Generating the login form and validation on React-form
         return(
-                <div className="form-group">
+                <div className="container">
                     <AvForm className="form-invite"  onSubmit={ this.handleSubmit }>
                         <h2 className="form-invite-heading">Invite a friend</h2>
                         <label style={{color: 'red'}}>{this.state.message}</label>
 
-                        <AvField name="email" label="Email*" value={this.state.username} type="email"   onChange={this.invitationHandler}
-                        type="text" 
+                        <AvField name="email" label="Email*" value={this.state.email} type="email"   onChange={this.invitationHandler}
                         validate={{
-                            required: {value: true, errorMessage: 'Please enter a username'},  
+                            required: {value: true, errorMessage: 'Please enter a valid email'},  
                         }} />
                         <Button color="primary">Invite</Button>        
                     </AvForm>
