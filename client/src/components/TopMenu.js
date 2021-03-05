@@ -44,7 +44,11 @@ const TopMenu = (props) => {
                   <Link to="/profile/">Profile</Link>
               </NavLink>
             </NavItem>
-           
+            <NavItem>
+              <NavLink>
+                  <Link to="/activateAccount/">Activate</Link>
+              </NavLink>
+            </NavItem>
           </Nav>
         </Collapse>
       </Navbar>

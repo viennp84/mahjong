@@ -15,6 +15,8 @@ class Register extends React.Component{
     constructor(props){
         super(props);
         //Binding data changing whenever data is changed from the controls.
+        this.firstnameChangeHandler = this.firstnameChangeHandler.bind(this);
+        this.lastnameChangeHandler = this.lastnameChangeHandler.bind(this);
         this.emailChangeHandler = this.emailChangeHandler.bind(this);
         this.phoneChangeHandler = this.phoneChangeHandler.bind(this);
         this.usernameChangeHandler = this.usernameChangeHandler.bind(this);
@@ -36,6 +38,14 @@ class Register extends React.Component{
     //Handle the username change
     usernameChangeHandler(event){
         this.setState({username: event.target.value});
+    }
+    //Handle the firstname change
+    firstnameChangeHandler(event){
+        this.setState({firstname: event.target.value});
+    }
+    //Handle the lastname change
+    lastnameChangeHandler(event){
+        this.setState({lastname: event.target.value});
     }
     //Handle the password change
     passwordChangeHandler(event){
@@ -92,16 +102,16 @@ class Register extends React.Component{
                         <label style={{color: 'red'}}>{this.state.message}</label>
                     <Row>
                         <Col xs="12" sm="6">
-                            <AvField name="firstname" label="First Name*" value={this.state.firstName} 
-                            type="text"  onChange={this.firstNameChangeHandler} 
+                            <AvField name="firstname" label="First Name*" value={this.state.firstname} 
+                            type="text"  onChange={this.firstnameChangeHandler} 
                             validate={{
                                 required: {value: true, errorMessage: 'Please enter first name'}
                             }} />
                         </Col>
 
                         <Col xs="12" sm="6">
-                            <AvField name="lastname" label="Last Name*" value={this.state.email} 
-                            type="text"  onChange={this.lastNameChangeHandler}
+                            <AvField name="lastname" label="Last Name*" value={this.state.lastname} 
+                            type="text"  onChange={this.lastnameChangeHandler}
                             validate={{
                                 required: {value: true, errorMessage: 'Pleas enter your last name'}
                             }} />

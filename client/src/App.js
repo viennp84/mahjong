@@ -10,6 +10,7 @@ import Home from './components/Home';
 import Profile from './components/Profile';
 import TopMenu from './components/TopMenu';
 import Friend  from './components/Friend';
+import Activate  from './components/ActivateAccount';
 
 
 //Import register component
@@ -36,6 +37,11 @@ const ProfilePage = () =>
 const FriendPage = () => 
 <div className="Friend">
   <Friend/>
+</div>;
+
+const ActivatePage = () => 
+<div className="Activate">
+  <Activate/>
 </div>;
 
 function App() {
@@ -66,6 +72,10 @@ function App() {
             <div>
             <Route path="/friend/" component={FriendPage} />
             </div>
+            <div>
+            <Route path="/activateAccount/" component={ActivatePage} />
+            </div>
+            
           </div>
         </Switch>
       </Router>

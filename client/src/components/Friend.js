@@ -5,7 +5,7 @@ import {Link, Redirect} from "react-router-dom";
 import { Button, Card } from 'reactstrap';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styles/Profile.css';
+import '../styles/Friend.css';
 /*  Vien Nguyen
     CST-452 Mahjong Game Online
     Feb/18/2021
@@ -17,7 +17,9 @@ class Friend extends React.Component{
         super(props);
         this.state={
             message: '',
-            email: null
+            email: null,
+            sender: null,
+            invitation: null
         };
         this.invitationHandler = this.invitationHandler.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,45 +35,92 @@ class Friend extends React.Component{
             return;
         }
         //Initiates a user object. 
-        const email ={
+        const invitation ={
+            sender: sessionStorage.getItem('mySessionStorageData'),
             email: this.state.email,
         }
-        //Using axios to send authenticaon to API invitation
-        axios.post('http://localhost:3001/users/invite', {email})
+        //Using axios to send inviate to API invitation
+        axios.post('http://localhost:3001/users/invite', {invitation})
         .then(
             //Validate return message after authentication.
             res=>{
-                //Display the error to the user, user does not exist
-                if(res.data.message.msg === "notExist"){
-                    this.setState({message: "User email does not exist"})
-                }         
+                //Display the message to the user if the invitation was sent
+                if(res.data.status === false){
+                    this.setState({message: res.data.message})
+                }
+                if(res.data.status === false){
+                    this.setState({message: res.data.message})
+                }
+                if(res.data.status !== false){
+                    this.setState({message: res.data.message})
+                }             
         })
         .catch((err)=>{
             console.log(err)
         });
     }
+    //componentDidMount is automatically run when first initiates rendering the page.
+    componentDidMount() {
+        //Get data from back end API
+        fetch("http://localhost:3001/users/getFriendList")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        isLoaded: true,
+                        //assigns result data to items variable of react state.
+                        items: result
+                        
+                    });
+                    console.log(result)
+                },
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            )
+    }
     //Render the login form
     render(){
-        const {redirect} = this.state;
-        //If user has logged in, redirect to home page.
-        if (redirect) {
-            return <Redirect to='/home/'/>;
-        }
-        //Generating the login form and validation on React-form
-        return(
-                <div className="container">
-                    <AvForm className="form-invite"  onSubmit={ this.handleSubmit }>
-                        <h2 className="form-invite-heading">Invite a friend</h2>
-                        <label style={{color: 'red'}}>{this.state.message}</label>
+        const { error, isLoaded, items } = this.state;
+        if (error) {
+            return <div>Error:{error.message}</div>
+        } else if (!isLoaded) {
+            return <div>Loading...</div>;
+        } else {
+            return (
+                
+                <div>   
+                    {/* Generating the login form and validation on React-form */}
+                    
+                    {/* <div className="container">
+                        <AvForm className="form-invite"  onSubmit={ this.handleSubmit }>
+                            <h2 className="form-invite-heading">Invite a friend</h2>
+                            <label style={{color: 'red'}}>{this.state.message}</label>
 
-                        <AvField name="email" label="Email*" value={this.state.email} type="email"   onChange={this.invitationHandler}
-                        validate={{
-                            required: {value: true, errorMessage: 'Please enter a valid email'},  
-                        }} />
-                        <Button color="primary">Invite</Button>        
-                    </AvForm>
+                            <AvField name="email" label="Email*" value={this.state.email} type="email"   onChange={this.invitationHandler}
+                            validate={{
+                                required: {value: true, errorMessage: 'Please enter a valid email'},  
+                            }} />
+                            <Button color="primary">Invite</Button>        
+                        </AvForm>
+                    </div> */}
+                    {items.data.result.map(item => (
+                        <p key={item.userId}>
+                           <li>
+                               <img className="avatar-img" src={'http://localhost:3001/users/avatar/' + item.image.split('/')[1]} alt="" />
+                               {item.firstname + " " +item.lastname}
+                           </li>  
+                            
+                        </p>
+                    ))}
                 </div>
-        );
+            );
+        }
+        
+        
     }
 }
 //Export the friend component.

@@ -65,10 +65,10 @@ class UploadProfile extends Component {
                                     this.setState({message:'Please select valid image.'});
                                     return false;
                                 }
-                                 
+                                 console.log(JSON.parse(sessionStorage.getItem('mySessionStorageData')).userId);
                                 const formData = new FormData();
                                 formData.append("avatar", this.state.file);
-                                formData.append("userId", 98);
+                                formData.append("userId", sessionStorage.getItem('mySessionStorageData').userId);
                                 const config = {
                                     headers: {
                                         'content-type': 'multipart/form-data'

@@ -72,7 +72,8 @@ class Profile extends React.Component {
         }
         //Initiate a user object
         const user = {
-            userId: event.target.elements.userId.value,
+            //userId: event.target.elements.userId.value,
+            userId: 115,
             firstname: event.target.elements.firstname.value,
             lastname: event.target.elements.lastname.value,
             email: event.target.elements.email.value,
@@ -90,7 +91,7 @@ class Profile extends React.Component {
                         isLoaded: true
                     });
                     //Get back the data updated in the database from calling API so that it indicates the latest data.
-                    fetch("http://localhost:3001/users/profile/98")
+                    fetch("http://localhost:3001/users/profile/"+JSON.parse(sessionStorage.getItem('mySessionStorageData')).userId)
                         .then(res => res.json())
                         .then(
                             (result) => {
@@ -115,7 +116,7 @@ class Profile extends React.Component {
     }
     //Initatial data on the profile page.
     componentDidMount() {
-        fetch("http://localhost:3001/users/profile/98")
+        fetch("http://localhost:3001/users/profile/"+JSON.parse(sessionStorage.getItem('mySessionStorageData')).userId)
             .then(res => res.json())
             .then(
                 (result) => {

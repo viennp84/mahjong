@@ -23,16 +23,16 @@ class Login extends React.Component{
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    setData(){
-        let obj = {name: 'vien', age: 30, email: 'vien@gmail.com'}
-        sessionStorage.setItem('mySessionStorageData', JSON.stringify(obj));
-    }
+    // setData(){
+    //     let obj = {name: 'vien', age: 30, email: 'vien@gmail.com'}
+    //     sessionStorage.setItem('mySessionStorageData', JSON.stringify(obj));
+    // }
 
-    getData(){
-        let data = sessionStorage.getItem('mySessionStorageData');
-        data = JSON.parse(data);
-        console.log(data.name);
-    }
+    // getData(){
+    //     let data = sessionStorage.getItem('mySessionStorageData');
+    //     data = JSON.parse(data);
+    //     console.log(data.name);
+    // }
 
     //Update username from the control when state is changed.
     usernameChangeHandler(event){
@@ -61,7 +61,7 @@ class Login extends React.Component{
             res=>{
                 //Display the error to the user, user does not exist
                 if(res.data.message.msg === "notExist"){
-                    this.setState({message: "Username does not exist"})
+                    this.setState({message: "Username does not exist or not activated yet"})
                 }
                 //Display the error incorrect password
                 if(res.data.message.msg === "incorrectPassword"){
@@ -85,7 +85,7 @@ class Login extends React.Component{
        
         //If user has logged in, redirect to home page.
         if (redirect) {
-            <userContext.Provider value={this.state.user} />
+            // <userContext.Provider value={this.state.user} />
 
             return <Redirect to='/home/'/>;
         }
@@ -117,8 +117,8 @@ class Login extends React.Component{
                             Don't have an account? <Link to="/register/">Sign up</Link>
                         </p>
                     </AvForm>
-                    <button onClick={()=>this.setData()}></button>
-                    <button onClick={()=>this.getData()}></button>
+                    {/* <button onClick={()=>this.setData()}></button>
+                    <button onClick={()=>this.getData()}></button> */}
                 </div>
                 
                    

@@ -1,5 +1,7 @@
 //Import Encryption package
 const bcrypt = require("bcrypt");
+const str = require('@supercharge/strings')
+
 const saltRounds = 10;
 //Import database package from db.js
 var db = require('../db');
@@ -9,26 +11,11 @@ const fs = require('fs');
 const path = require('path');
 var user= require('../models/user')
 const Nylas = require('nylas');
-
+ 
 Nylas.config({
   clientId: '4zp9e9e81xbehojanc35bq3ye',
   clientSecret: '230ea1pz1xjzyektxfsmallvg',
 });
-
-module.exports.inviteFriend = function (req, res) {
-  console.log(req.body.email);
-  // const nylas = Nylas.with('yBreaX0TbNkzx5ed6MN8igvljQZDfi');
-  // const draft = nylas.drafts.build({
-  //   subject: 'With Love, from Nylas',
-  //   to: [{ name: 'My Nylas Friend', email: 'jim.nguyen083@gmail.com' }],
-  //   body: 'This email was sent using the Nylas email API. Visit https://nylas.com for details.'
-  // });
-  // // Send the draft
-  // draft.send().then(message => {
-  //   console.log(`${message.id} was sent`);
-  // });
-
-}
 
 
 /*Register business service, checking if the username or email already exist on the database.
@@ -43,6 +30,7 @@ module.exports.register = function (req, res) {
   const password = req.body.user.password;
   const role = 0;
   const isActivated = 0;
+  const activationCode = str.random(6) 
   //Checking if the username is exist on database
   db.query("SELECT username FROM users WHERE email = ?", [email], (err, result) => {
     if (err) {
@@ -66,8 +54,8 @@ module.exports.register = function (req, res) {
               console.log(err);
             }
             //Execute insert data into the users table in the database
-            db.query("INSERT INTO users (email, phone, username, password, role, isActivated, firstname, lastname) VALUES (?,?,?,?,?,?,?,?)",
-              [email, phone, username, hash, role, isActivated, firstname, lastname], (err, result) => {
+            db.query("INSERT INTO users (email, phone, username, password, role, isActivated, firstname, lastname, image, activationCode) VALUES (?,?,?,?,?,?,?,?,?,?)",
+              [email, phone, username, hash, role, isActivated, firstname, lastname,"images/default.jpg", activationCode], (err, result) => {
                 if (err) {
                   res.send({ err: err })
                 }
@@ -80,7 +68,18 @@ module.exports.register = function (req, res) {
                         res.send({ err: err })
                       }
                     });
-                  console.log("Employee Id:- " + result.insertId);
+                  console.log("User Id:- " + result.insertId);
+                  console.log(activationCode);
+                    const nylas = Nylas.with('yBreaX0TbNkzx5ed6MN8igvljQZDfi');
+                    const draft = nylas.drafts.build({
+                      subject: 'Mahjong Account Activation Code',
+                      to: [{ name: firstname, email: email }],
+                      body: 'Hi, ' + firstname + '. Thank you for signing up with Mahong game. Please use this code: ' + activationCode + 'and User ID: ' + result.insertId + ' to activate your account'
+                    });
+                    // Send the draft
+                    draft.send().then(message => {
+                      console.log(`${message.id} was sent`);
+                    });
                   res.send({ message: true });
                 } else {
                   res.send({ message: false });
@@ -101,7 +100,7 @@ module.exports.login = function (req, res) {
 
   //The logic that it will check for the username first if it is existing on the database first
   //Select all fields of a record with username
-  db.query("SELECT * FROM users WHERE username = ?", [username], (err, result) => {
+  db.query("SELECT * FROM users WHERE username = ? AND isActivated = 1", [username], (err, result) => {
     if (err) {
       res.send({ err: err })
     }
@@ -262,6 +261,7 @@ module.exports.updateAvatar = (req, res) => {
     //Edit the name and attach file extension.
     const newFullPath = `${fullPathInServ}-${orgName}`;
     fs.renameSync(fullPathInServ, newFullPath);
+    console.log(userId);
     //Update the profile image for the user
     db.query("UPDATE users SET image = ? WHERE userId = ?", [newFullPath, userId], (err) => {
       if (err) {
@@ -287,4 +287,118 @@ module.exports.getAvatar = (req, res) => {
   }
   //respone the image url
   res.sendFile(path.resolve(`./images/${fileName}`));
+}
+
+/*Activate the user account using userID and activation code*/
+
+module.exports.activateAccount = (req, res) => {
+  //Get the userID, activation Code from the request
+  const userId = req.body.activate.userId;
+  const code = req.body.activate.code;
+  db.query("SELECT * FROM users WHERE userId = ? AND activationCode = ?", [userId, code],(err, result) => {
+    if (err) {
+      res.send({ err: err })
+    }
+    //initiate new user game data.
+    if (result.length > 0) {
+      db.query("UPDATE users SET isActivated = 1 WHERE userId = ?", [userId], (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+      res.send({
+        status: true,
+        message: 'Account is activated'
+      })
+    } else {
+      res.send({ 
+        status: false,
+        message: 'account is not activated, check your userId and activation code'
+       })
+    }
+  });
+}
+//Inviate a friend to sign up an account
+module.exports.inviteFriend = function (req, res) {
+  //Get the email of person to be invited
+   const inviteEmail = req.body.invitation.email;
+   //Get the userId of requester
+   const sender = JSON.parse(req.body.invitation.sender).userId;
+   //Get the email of the requester
+   const senderEmail = JSON.parse(req.body.invitation.sender).email;
+   //return message
+   const message = '';
+   //Check if the request sends friend request to themselve, sending the message back and do nothing
+   if(inviteEmail === senderEmail){
+      res.send({
+        status: false,
+        message:'Cannot invite yourself'
+      });
+    }else{
+      //Check if the invitation to a friend had been sent, cannot have two friend requests in the database for the same user
+      db.query("SELECT * FROM friendship WHERE userId = ? AND friendEmail = ?",[sender, inviteEmail], (err, result) => {
+        if (err) {
+            res.send({ err: err })
+        }
+        //Send back the message if found duplicated invitation
+        if(result.length > 0){
+            console.log('duplicate email invitation');
+            res.send({
+              status: false,
+              message:'Duplicated invitation'
+            });
+        }else{ //Insert the friend request data into the friendship table for later uses.
+            db.query("INSERT INTO friendship (userId, friendEmail) VALUES (?,?)",
+            [sender, inviteEmail], (err, result) => {
+              if (err) {
+                res.send({ err: err })
+              }else{
+                //Send the invitation via email
+                const nylas = Nylas.with('yBreaX0TbNkzx5ed6MN8igvljQZDfi');
+                const draft = nylas.drafts.build({
+                  subject: 'Mahjong Game. Hi, my name is: ' + JSON.parse(req.body.invitation.sender).firstname,
+                  to: [{ name: 'Friend', email:  inviteEmail}],
+                  body: 'Hi, sign up an account using your email on Mahjong game website to be friend and enjoy the game together!'
+                });
+                // Send the draft
+                draft.send().then(message => {
+                  console.log(`${message.id} was sent`);
+                });
+                //Send back the message for invitation was sent successfully.
+                res.send({ 
+                  status: true,
+                  message:'Invitation was sent'
+                })
+                return;
+              }
+            });  
+          }
+        });
+    }
+}
+//Get the friend list
+module.exports.getFriendList = function (req, res) {
+  //const userId = req.body.userId;
+  const userId = 117;
+  db.query("SELECT userId, firstname, lastname, image from users u WHERE EXISTS (SELECT friendID from friendship f WHERE u.userId = f.friendID AND f.userId = ?)",[userId], (err, result) => {
+    if (err) {
+      res.send({ err: err })
+    }
+    if (result.length > 0) {
+      res.send({
+        data: {
+          msg: "friend list",
+          result: result
+        }
+      })
+    }
+    else {
+      res.send({
+        data: {
+          msg: "cannot get data",
+          result: null
+        }
+      })
+    }
+  });
 }

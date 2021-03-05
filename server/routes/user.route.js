@@ -21,6 +21,9 @@ router.post('/avatar', controller.updateAvatar);
 router.get('/avatar/:name', controller.getAvatar);
 //Send email via Nylas
 router.post('/invite', controller.inviteFriend);
-
+//Activate account
+router.post('/activate', controller.activateAccount);
+//Get friend List
+router.get('/getFriendList', controller.getFriendList);
 
 module.exports = router;
