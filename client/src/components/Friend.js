@@ -6,6 +6,7 @@ import { Button, Card } from 'reactstrap';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/Friend.css';
+import {  Row, Col, CardHeader, CardBody, Label } from 'reactstrap';
 /*  Vien Nguyen
     CST-452 Mahjong Game Online
     Feb/18/2021
@@ -61,8 +62,9 @@ class Friend extends React.Component{
     }
     //componentDidMount is automatically run when first initiates rendering the page.
     componentDidMount() {
+        const userId = 117;
         //Get data from back end API
-        fetch("http://localhost:3001/users/getFriendList")
+        fetch("http://localhost:3001/users/getFriendList/" + JSON.parse(sessionStorage.getItem('mySessionStorageData')).userId)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -90,8 +92,7 @@ class Friend extends React.Component{
         } else if (!isLoaded) {
             return <div>Loading...</div>;
         } else {
-            return (
-                
+            return ( 
                 <div>   
                     {/* Generating the login form and validation on React-form */}
                     
@@ -108,14 +109,30 @@ class Friend extends React.Component{
                         </AvForm>
                     </div> */}
                     {items.data.result.map(item => (
-                        <p key={item.userId}>
-                           <li>
-                               <img className="avatar-img" src={'http://localhost:3001/users/avatar/' + item.image.split('/')[1]} alt="" />
-                               {item.firstname + " " +item.lastname}
-                           </li>  
+                        // <p key={item.userId}>
+                        //    <li>
+                        //        <img className="avatar-img" src={'http://localhost:3001/users/avatar/' + item.image.split('/')[1]} alt="" />
+                        //        {item.firstname + " " +item.lastname}
+                        //    </li>  
                             
-                        </p>
-                    ))}
+                        // </p>
+                        <Row>
+                        <Col sm={2}>
+                            <Card>
+                                <CardBody>
+                                    <Row>
+                                    <li>
+                                        <img className="avatar-img-list" src={'http://localhost:3001/users/avatar/' + item.image.split('/')[1]} alt="" />
+                                        <Label for="won-games" className="lb-text">{item.firstname + " " + item.lastname}</Label>
+                                    </li> 
+                                    </Row>
+                                </CardBody>
+                            </Card>
+                        </Col>
+
+                    </Row>
+                    )
+                    )}
                 </div>
             );
         }

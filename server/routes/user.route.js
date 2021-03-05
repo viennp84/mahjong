@@ -24,6 +24,6 @@ router.post('/invite', controller.inviteFriend);
 //Activate account
 router.post('/activate', controller.activateAccount);
 //Get friend List
-router.get('/getFriendList', controller.getFriendList);
+router.get('/getFriendList/:userId', controller.getFriendList);
 
 module.exports = router;

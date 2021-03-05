@@ -378,8 +378,7 @@ module.exports.inviteFriend = function (req, res) {
 }
 //Get the friend list
 module.exports.getFriendList = function (req, res) {
-  //const userId = req.body.userId;
-  const userId = 117;
+  const userId = req.params.userId;
   db.query("SELECT userId, firstname, lastname, image from users u WHERE EXISTS (SELECT friendID from friendship f WHERE u.userId = f.friendID AND f.userId = ?)",[userId], (err, result) => {
     if (err) {
       res.send({ err: err })

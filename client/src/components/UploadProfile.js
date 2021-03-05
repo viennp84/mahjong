@@ -68,7 +68,7 @@ class UploadProfile extends Component {
                                  console.log(JSON.parse(sessionStorage.getItem('mySessionStorageData')).userId);
                                 const formData = new FormData();
                                 formData.append("avatar", this.state.file);
-                                formData.append("userId", sessionStorage.getItem('mySessionStorageData').userId);
+                                formData.append("userId", JSON.parse(sessionStorage.getItem('mySessionStorageData')).userId);
                                 const config = {
                                     headers: {
                                         'content-type': 'multipart/form-data'
