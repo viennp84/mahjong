@@ -117,7 +117,7 @@ class Friend extends React.Component{
                             
                         // </p>
                         <Row>
-                        <Col sm={2}>
+                        <Col sm={4}>
                             <Card>
                                 <CardBody>
                                     <Row>

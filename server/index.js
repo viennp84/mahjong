@@ -5,6 +5,7 @@ const cors = require("cors");
 const bodyParser = require('body-parser');
 //Declare the userRout to process the request from the user
 var userRoutes = require('./routes/user.route')
+var adminRoutes = require('./routes/admin.route')
 const app = express();
 // Allow REACTApp  from this specific address to access
 const corsOptions = {
@@ -39,6 +40,8 @@ app.get('/', function(request, response){
 });
 //Add the users route to handle the request from the user
 app.use('/users', userRoutes);
+//Add the adminroute to handle the request from the admin
+app.use('/admin', adminRoutes);
 //Running the app
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);

@@ -11,7 +11,8 @@ import Profile from './components/Profile';
 import TopMenu from './components/TopMenu';
 import Friend  from './components/Friend';
 import Activate  from './components/ActivateAccount';
-
+import AdminReport from './components/AdminReport';
+import UpdatePassword from './components/UpdatePassword';
 
 //Import register component
 const RegisterForm = () => 
@@ -44,6 +45,15 @@ const ActivatePage = () =>
   <Activate/>
 </div>;
 
+const AdminReportPage = () => 
+<div className="AdminReport">
+  <AdminReport/>
+</div>;
+
+const UpdatePasswordPage = () => 
+<div className="UpdatePassword">
+  <UpdatePassword/>
+</div>;
 function App() {
   //Render the home page from the home component
  
@@ -57,23 +67,33 @@ function App() {
         <Switch>
           <div>
             <div>
-            <Route path="/" exact component={LoginForm} />
+              <Route path="/" exact component={LoginForm} />
             </div>
 
             <div>
-            <Route path="/register/" component={RegisterForm} />
+              <Route path="/register/" component={RegisterForm} />
             </div> 
           
-            <Route path="/home/" component={HomePage} />
+             <Route path="/home/" component={HomePage} />
 
             <div>
-            <Route path="/profile/" component={ProfilePage} />
+              <Route path="/profile/" component={ProfilePage} />
             </div>
+
             <div>
-            <Route path="/friend/" component={FriendPage} />
+              <Route path="/friend/" component={FriendPage} />
             </div>
+
             <div>
-            <Route path="/activateAccount/" component={ActivatePage} />
+              <Route path="/activateAccount/" component={ActivatePage} />
+            </div>
+
+             <div>
+              <Route path="/adminReport/" component={AdminReportPage} />
+            </div>
+
+            <div>
+              <Route path="/updatePassword/" component={UpdatePasswordPage} />
             </div>
             
           </div>

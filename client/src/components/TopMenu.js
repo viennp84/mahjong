@@ -1,6 +1,18 @@
 import React, { useState } from 'react';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
-import {Collapse,Navbar,NavbarToggler,NavbarBrand,Nav,NavItem,NavLink} from 'reactstrap';
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  NavbarText} from 'reactstrap';
 
 /*  Vien Nguyen
     CST-452 Mahjong Game Online
@@ -49,6 +61,30 @@ const TopMenu = (props) => {
                   <Link to="/activateAccount/">Activate</Link>
               </NavLink>
             </NavItem>
+            <UncontrolledDropdown nav inNavbar>
+              <DropdownToggle nav caret>
+                Admin
+              </DropdownToggle>
+              <DropdownMenu right>
+                <DropdownItem>
+                  <NavLink>
+                    <Link to="/activateAccount/">Search</Link>
+                </NavLink>
+                </DropdownItem>
+                <DropdownItem>
+                  <NavLink>
+                      <Link to="/adminReport/">View Report</Link>
+                  </NavLink>
+                </DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>
+                  <NavLink>
+                      <Link to="/updatePassword/">Update Password</Link>
+                  </NavLink>
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+
           </Nav>
         </Collapse>
       </Navbar>
