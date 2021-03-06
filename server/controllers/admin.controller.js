@@ -106,39 +106,37 @@ module.exports.updatePassword = function (req, res) {
   console.log(userId);
   console.log(currentPassword);
   console.log(newPassword);
-  db.query("SELECT * FROM users WHERE userId = ? ", [userId], (err, result) => {
-    if (err) {
-      res.send({ err: err })
-    }
-    if (result.length > 0) {
-      bcrypt.compare(currentPassword, result[0].password, (err)=> {
-        bcrypt.hash(newPassword, saltRounds, (err, hash) => {
-          if (err) {
-            console.log(err);
-          }
-          db.query("UPDATE users SET password = ? WHERE userId = ?", [hash, userId], (err, result) => { 
-            console.log(result.affectedRows);
-            if(result.affectedRows > 0){
-              res.send({
-                message: {
-                  //Provide a messege that user changed the password
-                  result: true
-                }
-              })
-            }else{
-              res.send({
-                message: {
-                  //Provide a messege that user changed the password
-                  result: false
-                }
-              })
+    db.query("SELECT * FROM users WHERE userId = ? ", [userId], (err, result) => {
+      if (err) {
+        res.send({ err: err })
+      }
+      if (result.length > 0) {
+        bcrypt.compare(currentPassword, result[0].password, (err)=> {
+          bcrypt.hash(newPassword, saltRounds, (err, hash) => {
+            if (err) {
+              console.log(err);
             }
+            db.query("UPDATE users SET password = ? WHERE userId = ?", [hash, userId], (err, result) => { 
+              console.log(result.affectedRows);
+              if(result.affectedRows > 0){
+                res.send({
+                  message: {
+                    //Provide a messege that user changed the password
+                    result: true
+                  }
+                })
+              }else{
+                res.send({
+                  message: {
+                    //Provide a messege that user changed the password
+                    result: false
+                  }
+                })
+              }
+            });
           });
         });
-      });
-    }
-});
-
-
+      }
+  });
 }
 
