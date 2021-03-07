@@ -9,6 +9,7 @@ var controller = require('../controllers/game.controller');
 router.get('/getGameRoom', controller.getGameRoom);
 router.get('/createNewGame', controller.createNewGame);
 router.get('/getAllMahjongTiles', controller.getAllMahjongTiles);
+router.get('/getThreeDice', controller.getThreeDice);
 
 
 

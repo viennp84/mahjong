@@ -3,11 +3,20 @@ import { fabric } from 'fabric';
 import Tile from './Tile';
 import Board from './Board';
 import OneBam from "../images/1-bam.png";
+import Dice from "../images/dice.png";
+import Dice1 from "../images/dice1.png";
+import Dice2 from "../images/dice2.png";
+import Dice3 from "../images/dice3.png";
+import Dice4 from "../images/dice4.png";
+import Dice5 from "../images/dice5.png";
+import Dice6 from "../images/dice6.png";
 const Game = () => {
   var tile = new Tile();
   var board = new Board();
 
+
   const [canvas, setCanvas] = useState('');
+  const [diceValue, setDiceValue] = useState(10);
   useEffect(() => {
    
     setCanvas(initCanvas());
@@ -77,7 +86,31 @@ const Game = () => {
     console.log(board);
   }
   const loadDiceSet = canvi =>{
-    
+    fetch("http://localhost:3001/game/getThreeDice")
+    .then(res => res.json())
+    .then(
+        (result) => {
+          // result.data.result.map(x => console.log(x.tileImage)
+
+          // );
+          var leftPosition = 650;
+          var topPosition = 550;
+          
+          result.data.result.map(
+            x => fabric.Image.fromURL(x.diceImage, function(myImg) {
+              //i create an extra var for to change some image properties
+              var img1 = myImg.set({ left: leftPosition, top: topPosition ,width:504,height:486});
+              canvi.add(img1);
+              img1.scaleToWidth(40);
+              leftPosition+=40;
+              
+            })
+          );
+        },
+        setDiceValue(30)
+    )
+   
+    console.log(diceValue);
   }
   const loadMahjongSet = canvi => {
     console.log("loading...");
@@ -118,7 +151,12 @@ const Game = () => {
                   //   //   }
                     
                   //   // })
+  const rollDice = () =>(
+    setDiceValue(80),
+    console.log("hell")
+  )
 
+  
   return(
     <div>
       <h1>Mahjong Table</h1>
@@ -133,6 +171,10 @@ const Game = () => {
         Load Mahjong Set
       </button>
       <button onClick={()=> loadDiceSet(canvas)}>
+        Load Dice Set
+      </button>
+
+      <button onClick={()=> rollDice()}>
         Load Dice Set
       </button>
       {/* <img src="http://fabricjs.com/assets/pug_small.jpg" id="my-image" width="500px" height="500px"/> */}

@@ -3,7 +3,7 @@ var db = require('../db');
 var Tile = require('../models/Tiles');
 var Player = require('../models/Player');
 var Board = require('../models/Board');
-
+var Dice = require('../models/Dice');
 module.exports.getGameRoom = function (req, res) {
     db.query("SELECT * FROM gameRoom WHERE ID = 1", (err, result) => {
         if (err) {
@@ -99,6 +99,42 @@ module.exports.getAllMahjongTiles= function (req, res) {
         data: {
           status: true,
           result: tiles
+        }
+      });
+    }
+    else{
+      res.send({
+        data: {
+          status: false,
+          result: ''
+        }
+      });
+    }
+  });    
+};
+
+module.exports.getThreeDice = function (req, res) {
+
+  var threeDice = [];
+  db.query("SELECT * FROM dice", (err, result) => {
+    if (err) {
+      res.send({ err: err })
+    }
+    if(result.length > 0){
+      for(var i = 0; i < 3; i ++){
+        var dice = new Dice(
+          result[0].ID,
+          result[0].Side,
+          result[0].Value,
+          result[0].Image
+        );
+        threeDice.push(dice);
+        console.log(result);
+      }
+      res.send({
+        data: {
+          status: true,
+          result: threeDice
         }
       });
     }
