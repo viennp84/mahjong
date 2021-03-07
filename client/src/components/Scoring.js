@@ -75,6 +75,7 @@ class Scoring extends React.Component {
     }
     //Get the scoring data from the scoring API.
     componentDidMount() {
+        console.log(EightChrac);
         fetch("http://localhost:3001/users/scoring")
             .then(res => res.json())
             .then(

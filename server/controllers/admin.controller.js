@@ -140,3 +140,52 @@ module.exports.updatePassword = function (req, res) {
   });
 }
 
+module.exports.deactivateAccount = function(req, res) {
+  const userId = req.params.userId;
+  db.query("UPDATE users SET isDeleted = ? WHERE userId = ?", [true, userId], (err, result) => { 
+    if (err) {
+      res.send({ err: err })
+    } 
+    console.log(result);
+    if(result.affectedRows > 0){
+      res.send({
+        message: {
+          //Provide a messege that user changed the password
+          result: true
+        }
+      })
+    }else{
+      res.send({
+        message: {
+          //Provide a messege that user changed the password
+          result: false
+        }
+      })
+    }
+});
+}
+
+module.exports.getUnActivateddUsers = function (req, res) {
+  //Checking if the username is exist on database
+db.query("SELECT userId, username, role, lastLogin, isActivated, email, phone, firstname, lastname, image FROM users WHERE isActivated = 0", (err, result) => {
+  if (err) {
+    res.send({ err: err })
+  }
+  if (result.length > 0) {
+      res.send({
+        data: {
+          msg: "user data",
+          result: result
+        }
+      })
+    }
+    else {
+      res.send({
+        data: {
+          msg: "cannot get data",
+          result: null
+        }
+      })
+    }
+  });
+};

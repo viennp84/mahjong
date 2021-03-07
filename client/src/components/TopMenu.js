@@ -68,11 +68,6 @@ const TopMenu = (props) => {
               <DropdownMenu right>
                 <DropdownItem>
                   <NavLink>
-                    <Link to="/activateAccount/">Search</Link>
-                </NavLink>
-                </DropdownItem>
-                <DropdownItem>
-                  <NavLink>
                       <Link to="/adminReport/">View Report</Link>
                   </NavLink>
                 </DropdownItem>

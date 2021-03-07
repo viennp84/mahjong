@@ -13,6 +13,7 @@ import Friend  from './components/Friend';
 import Activate  from './components/ActivateAccount';
 import AdminReport from './components/AdminReport';
 import UpdatePassword from './components/UpdatePassword';
+import Game from "./components/Game";
 
 //Import register component
 const RegisterForm = () => 
@@ -54,6 +55,11 @@ const UpdatePasswordPage = () =>
 <div className="UpdatePassword">
   <UpdatePassword/>
 </div>;
+
+const GamePage = () =>
+<div className="Game">
+  <Game/>
+</div>
 function App() {
   //Render the home page from the home component
  
@@ -82,6 +88,10 @@ function App() {
 
             <div>
               <Route path="/friend/" component={FriendPage} />
+            </div>
+
+            <div>
+              <Route path="/game/" component={GamePage} />
             </div>
 
             <div>

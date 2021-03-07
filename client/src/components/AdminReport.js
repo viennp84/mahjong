@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import { ButtonToggle } from 'reactstrap';
 import { Button, Row, Col } from 'reactstrap';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
-
+import axios from 'axios';
 /*
 Vien Nguyen
 CST-452 Senior Project II
@@ -21,30 +21,12 @@ class AdminReport extends React.Component{
             actionViewUsers: false,
             items: '',
             hasData: false,
-            keyWord: ''
+            keyWord: '',
+            isUnactivatedUser: false
         };
         
     }
-    // componentDidMount() {
-    //     //Get data from back end API
-    //     fetch("http://localhost:3001/admin/viewUsers")
-    //         .then(res => res.json())
-    //         .then(
-    //             (result) => {
-    //                 this.setState({
-    //                     isLoaded: true,
-    //                     //assigns result data to items variable of react state.
-    //                     items: result
-    //                 });
-    //             },
-    //             (error) => {
-    //                 this.setState({
-    //                     isLoaded: true,
-    //                     error
-    //                 });
-    //             }
-    //         )
-    // }
+
     getAllUsers = e => {
           e.preventDefault();
          // do something here
@@ -53,7 +35,6 @@ class AdminReport extends React.Component{
             .then(
                 (result) => {
                     this.setState({
-                        isLoaded: true,
                         //assigns result data to items variable of react state.
                         items: result
                     });
@@ -64,7 +45,6 @@ class AdminReport extends React.Component{
                 },
                 (error) => {
                     this.setState({
-                        isLoaded: true,
                         error
                     });
                 }
@@ -78,7 +58,6 @@ class AdminReport extends React.Component{
             .then(
                 (result) => {
                     this.setState({
-                        isLoaded: true,
                         //assigns result data to items variable of react state.
                         items: result
                     });
@@ -89,7 +68,50 @@ class AdminReport extends React.Component{
                 },
                 (error) => {
                     this.setState({
-                        isLoaded: true,
+                        error
+                    });
+                }
+            )
+    }
+    logicalRemoveUser = e => {
+        const userId = 118;
+        e.preventDefault();
+        fetch("http://localhost:3001/admin/deactivateAccount/" + userId).then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result);
+                //Redirect the page after registered. 
+                if(result.message.result === true){
+                    this.setState({message: "Removed user successfully"})
+                    
+                }else{
+                    this.setState({message: "Could not remove user"})
+                }
+        })
+        .catch((err)=>{
+            console.log(err)
+        });
+    }
+
+    getUnActivatedUsers = e => {
+          e.preventDefault();
+         // do something here
+        fetch("http://localhost:3001/admin/getUnActivateddUsers")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        //assigns result data to items variable of react state.
+                        items: result,
+                        isUnactivatedUser: true
+                    });
+                    //console.log(result)
+                    if(result){
+                        this.setState({hasData: true})
+                    }
+                },
+                (error) => {
+                    this.setState({
                         error
                     });
                 }
@@ -102,7 +124,6 @@ class AdminReport extends React.Component{
             .then(
                 (result) => {
                     this.setState({
-                        isLoaded: true,
                         //assigns result data to items variable of react state.
                         items: result
                     });
@@ -113,7 +134,6 @@ class AdminReport extends React.Component{
                 },
                 (error) => {
                     this.setState({
-                        isLoaded: true,
                         error
                     });
                 }
@@ -122,14 +142,7 @@ class AdminReport extends React.Component{
     keyWordChangeHandler(event){
         this.setState({keyWord: event.target.value});
     }
-    renderTableHeader() {
-        let header = Object.keys(this.state.items[0])
-        return header.map((key, index) => {
-           return <th key={index}>{key.toUpperCase()}</th>
-        })
-    }
-    
-    renderUserDataTable(items) {
+    renderUserDataTable(items, isUnactivatedUser) {
         return items.data.result.map((items, index) => {
            const { email,
            firstname,
@@ -151,6 +164,8 @@ class AdminReport extends React.Component{
                  <td>{email}</td>
                  <td>{isActivated?'Yes':'No'}</td>
                  <td>{lastLogin}</td>
+                 <td>{isActivated?'':<ButtonToggle onClick={this.logicalRemoveUser}>Remove</ButtonToggle>}</td>
+                
               </tr>
            )
         })
@@ -158,13 +173,14 @@ class AdminReport extends React.Component{
 
     //Render the Admin component.
     render(){
-        const { error, isLoaded, items, hasData } = this.state;
+        const { error, isLoaded, items, hasData, isUnactivatedUser} = this.state;
         //console.log(items);
         return(
             //Include the menu component into the home page
            <div className="Home">
                <ButtonToggle color="info" onClick={this.getAllUsers} >View all users</ButtonToggle>{' '}
                <ButtonToggle color="info" onClick={this.getActivatedUsers}>View active users</ButtonToggle>{' '}
+               <ButtonToggle color="info" onClick={this.getUnActivatedUsers}>View unactived users</ButtonToggle>{' '}
                 <input name="keyword" type="text" value={this.state.keyWord} onChange={this.keyWordChangeHandler}/>{' '}
                 <ButtonToggle color="info" onClick={this.searchForUser}>Search</ButtonToggle>{' '}
                 {hasData?(
@@ -175,7 +191,8 @@ class AdminReport extends React.Component{
                                 <h3> Username: {item.username} </h3> 
                                 </p>
                             ))}</p1> */}
-                        <h1 id='title'>The table of all users</h1>
+                        <h1 id='title'>List of users</h1>
+                        <label style={{color: 'red'}}>{this.state.message}</label>
                         <table id='users'>
                         <tbody>
                         <tr>
@@ -193,7 +210,7 @@ class AdminReport extends React.Component{
                         </table>
                     </div>
                 ):(
-                    <h2>There is no user data</h2>
+                    <h2>Click on the controls to view user details</h2>
                 )
                 }
            </div>

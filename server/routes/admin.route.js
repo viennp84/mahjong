@@ -31,5 +31,7 @@ router.get('/getAllUsers', controller.getAllUsers);
 router.get('/getActivatedUsers', controller.getActivatedUsers);
 router.get('/searchForUser/:keyWord', controller.searchForUser);
 router.post('/updatePassword', controller.updatePassword);
+router.get('/getUnActivateddUsers', controller.getUnActivateddUsers);
+router.get('/deactivateAccount/:userId', controller.deactivateAccount);
 
 module.exports = router;

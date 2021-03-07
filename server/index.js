@@ -4,8 +4,9 @@ var session = require('client-sessions');
 const cors = require("cors"); 
 const bodyParser = require('body-parser');
 //Declare the userRout to process the request from the user
-var userRoutes = require('./routes/user.route')
-var adminRoutes = require('./routes/admin.route')
+var userRoutes = require('./routes/user.route');
+var adminRoutes = require('./routes/admin.route');
+var gameRoutes = require('./routes/game.route');
 const app = express();
 // Allow REACTApp  from this specific address to access
 const corsOptions = {
@@ -42,6 +43,8 @@ app.get('/', function(request, response){
 app.use('/users', userRoutes);
 //Add the adminroute to handle the request from the admin
 app.use('/admin', adminRoutes);
+//Add the gameroute to handle the request from the game
+app.use('/game', gameRoutes);
 //Running the app
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
