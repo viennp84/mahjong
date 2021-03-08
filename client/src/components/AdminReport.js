@@ -1,21 +1,23 @@
-import React, {Component} from 'react';
-import "bootstrap/dist/css/bootstrap.min.css"
-import { ButtonToggle } from 'reactstrap';
-import { Button, Row, Col } from 'reactstrap';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
-import axios from 'axios';
+import React, {Component} from 'react'; //Import component React library
+import "bootstrap/dist/css/bootstrap.min.css" //Import css file for the component
+import { ButtonToggle } from 'reactstrap'; //Import Reactstrap javascript library
 /*
 Vien Nguyen
 CST-452 Senior Project II
 Feb 1st/2021
-This is the home component. It contains Admin component
+This component will generate the report for admin.
+The admin can will the active users. View the users that have not activate the account.
+View all users.
 */
-//Create the home page component
+//Create the Admin report page component
 class AdminReport extends React.Component{
+    //Create the class constructor
     constructor(props){
-        
+        //Initiating the class properties and data
         super(props);
+        //Binding the keyword text box with data change event.
         this.keyWordChangeHandler = this.keyWordChangeHandler.bind(this);
+        //Create the initial state
         this.state={
             message: '',
             actionViewUsers: false,
@@ -24,12 +26,12 @@ class AdminReport extends React.Component{
             keyWord: '',
             isUnactivatedUser: false
         };
-        
     }
-
+    /*The method will call the getAllUsers API service
+    get the respond data to fetch the display on a table via result variable*/
     getAllUsers = e => {
           e.preventDefault();
-         // do something here
+         // Call API service
         fetch("http://localhost:3001/admin/getAllUsers")
             .then(res => res.json())
             .then(
@@ -38,11 +40,12 @@ class AdminReport extends React.Component{
                         //assigns result data to items variable of react state.
                         items: result
                     });
-                    console.log(result)
+                    //Checking if result has data
                     if(result){
                         this.setState({hasData: true})
                     }
                 },
+                //Display error if cannot call the API service
                 (error) => {
                     this.setState({
                         error
@@ -50,9 +53,11 @@ class AdminReport extends React.Component{
                 }
             )
     }
+    /*The method will call getActivatedUsers from an API server
+    to get all user that is activated*/
     getActivatedUsers = e => {
           e.preventDefault();
-         // do something here
+         // calling the API
         fetch("http://localhost:3001/admin/getActivatedUsers")
             .then(res => res.json())
             .then(
@@ -61,11 +66,12 @@ class AdminReport extends React.Component{
                         //assigns result data to items variable of react state.
                         items: result
                     });
-                    console.log(result)
+                    //Checking the result for data existance from the result
                     if(result){
                         this.setState({hasData: true})
                     }
                 },
+                //Display the error if cannot get the data from API service
                 (error) => {
                     this.setState({
                         error
@@ -73,29 +79,35 @@ class AdminReport extends React.Component{
                 }
             )
     }
+    /*The method will call logical Remove User from an API server
+    to remove a user*/
     logicalRemoveUser = e => {
-        const userId = 118;
+        const userId = 118; //HArd code for testing only
+        //const userId = '';
         e.preventDefault();
+        //Calling the deactivateAccount Service
         fetch("http://localhost:3001/admin/deactivateAccount/" + userId).then(res => res.json())
         .then(
             (result) => {
                 console.log(result);
                 //Redirect the page after registered. 
                 if(result.message.result === true){
+                    //set notification message
                     this.setState({message: "Removed user successfully"})
-                    
                 }else{
+                     //set notification message
                     this.setState({message: "Could not remove user"})
                 }
         })
+        //Display the error
         .catch((err)=>{
             console.log(err)
         });
     }
-
+    /*The method to get the uncativated user*/
     getUnActivatedUsers = e => {
           e.preventDefault();
-         // do something here
+         // Calling the get unactivated users from API Service
         fetch("http://localhost:3001/admin/getUnActivateddUsers")
             .then(res => res.json())
             .then(
@@ -105,11 +117,11 @@ class AdminReport extends React.Component{
                         items: result,
                         isUnactivatedUser: true
                     });
-                    //console.log(result)
                     if(result){
                         this.setState({hasData: true})
                     }
                 },
+                //Set the error value
                 (error) => {
                     this.setState({
                         error
@@ -117,31 +129,38 @@ class AdminReport extends React.Component{
                 }
             )
     }
+    /*The method for searching the user on the user database*/
     searchForUser= e => {
        e.preventDefault();
+       //Calling the search service from the API service
         fetch("http://localhost:3001/admin/searchForUser/" + this.state.keyWord)
             .then(res => res.json())
             .then(
                 (result) => {
+                    //Set the stage 
                     this.setState({
                         //assigns result data to items variable of react state.
                         items: result
                     });
-                    console.log(result)
+                    //Check for the rusult has data
                     if(result){
                         this.setState({hasData: true})
                     }
                 },
+                //Display the error message
                 (error) => {
                     this.setState({
                         error
                     });
                 }
             )
-    }   
+    } 
+    /*Method to bind the key search change*/  
     keyWordChangeHandler(event){
+        //Set the state data
         this.setState({keyWord: event.target.value});
     }
+    /*Method to render the report table*/
     renderUserDataTable(items, isUnactivatedUser) {
         return items.data.result.map((items, index) => {
            const { email,
@@ -165,7 +184,6 @@ class AdminReport extends React.Component{
                  <td>{isActivated?'Yes':'No'}</td>
                  <td>{lastLogin}</td>
                  <td>{isActivated?'':<ButtonToggle onClick={this.logicalRemoveUser}>Remove</ButtonToggle>}</td>
-                
               </tr>
            )
         })

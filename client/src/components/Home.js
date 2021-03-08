@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css"
 import Introduction from './Introduction';
-import {userContext} from '../libs/userContext';
 /*
 Vien Nguyen
 CST-452 Senior Project II
@@ -18,7 +17,6 @@ class Home extends React.Component{
             message: '',
             user: null
         };
-
     }
     getData(){
         let data = sessionStorage.getItem('mySessionStorageData');

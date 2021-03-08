@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 module.exports.getAllUsers = function (req, res) {
     //Checking if the username is exist on database
-  db.query("SELECT userId, username, role, lastLogin, isActivated, email, phone, firstname, lastname, image FROM users", (err, result) => {
+  db.query("SELECT userId, username, role, lastLogin, isActivated, email, phone, firstname, lastname, image FROM users WHERE isDeleted = 0", (err, result) => {
     if (err) {
       res.send({ err: err })
     }
@@ -28,7 +28,7 @@ module.exports.getAllUsers = function (req, res) {
 };
 module.exports.getActivatedUsers = function (req, res) {
     //Checking if the username is exist on database
-  db.query("SELECT userId, username, role, lastLogin, isActivated, email, phone, firstname, lastname, image FROM users WHERE isActivated = 1", (err, result) => {
+  db.query("SELECT userId, username, role, lastLogin, isActivated, email, phone, firstname, lastname, image FROM users WHERE isActivated = 1 AND isDeleted = 0", (err, result) => {
     if (err) {
       res.send({ err: err })
     }
@@ -167,7 +167,7 @@ module.exports.deactivateAccount = function(req, res) {
 
 module.exports.getUnActivateddUsers = function (req, res) {
   //Checking if the username is exist on database
-db.query("SELECT userId, username, role, lastLogin, isActivated, email, phone, firstname, lastname, image FROM users WHERE isActivated = 0", (err, result) => {
+db.query("SELECT userId, username, role, lastLogin, isActivated, email, phone, firstname, lastname, image FROM users WHERE isActivated = 0 AND isDeleted = 0 ", (err, result) => {
   if (err) {
     res.send({ err: err })
   }

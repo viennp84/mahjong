@@ -23,17 +23,6 @@ class Login extends React.Component{
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    // setData(){
-    //     let obj = {name: 'vien', age: 30, email: 'vien@gmail.com'}
-    //     sessionStorage.setItem('mySessionStorageData', JSON.stringify(obj));
-    // }
-
-    // getData(){
-    //     let data = sessionStorage.getItem('mySessionStorageData');
-    //     data = JSON.parse(data);
-    //     console.log(data.name);
-    // }
-
     //Update username from the control when state is changed.
     usernameChangeHandler(event){
         this.setState({username: event.target.value});

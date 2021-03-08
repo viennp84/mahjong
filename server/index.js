@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 var userRoutes = require('./routes/user.route');
 var adminRoutes = require('./routes/admin.route');
 var gameRoutes = require('./routes/game.route');
+const socket = require("socket.io");
 const app = express();
 // Allow REACTApp  from this specific address to access
 const corsOptions = {
@@ -46,6 +47,15 @@ app.use('/admin', adminRoutes);
 //Add the gameroute to handle the request from the game
 app.use('/game', gameRoutes);
 //Running the app
-app.listen(port, hostname, () => {
+const server = app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+// Socket setup
+const io = socket(server);
+const activeUsers = new Set();
+io.on("connection", function (socket) {
+  socket.on('channel-join', ()=>{
+    console.log('channel join', id);
+  });
+});
+

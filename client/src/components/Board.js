@@ -1,5 +1,13 @@
-import Layer from './Player';
+//Import player class 
+import Layer from './Player'; 
+/*
+Vien Nguyen
+CST-452 Senior Project II
+Feb 5th/2021
+The Board class is used to manage the game data
+*/
 export default class Board {
+  //Declare the class properties
     constructor(){
         this.tiles = []
         this.eastPlayer = new Layer()
@@ -10,6 +18,5 @@ export default class Board {
         this.windOfGame = ''
         this.diceRolledValue = ''
         this.flowerWallNumber = ''
-
-      }
+    }
 }

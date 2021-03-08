@@ -50,24 +50,7 @@ db.query("SELECT * FROM Tile", (err, result) => {
   }
 });
 res.send();
-// db.query("SELECT * FROM gameRoom WHERE ID = 1", (err, result) => {
-//   if (err) {
-//     res.send({ err: err })
-//   }
-//   if (result.length > 0) {
-//       res.send({
-       
-//     })
-//   }
-//   else {
-//     res.send({
-//       data: {
-//         msg: "cannot get data",
-//         result: null
-//         }
-//       })
-//     }
-//   });
+
 };
 
 module.exports.getAllMahjongTiles= function (req, res) {
@@ -129,7 +112,6 @@ module.exports.getThreeDice = function (req, res) {
           result[0].Image
         );
         threeDice.push(dice);
-        console.log(result);
       }
       res.send({
         data: {
