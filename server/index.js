@@ -53,9 +53,11 @@ const server = app.listen(port, hostname, () => {
 // Socket setup
 const io = socket(server);
 const activeUsers = new Set();
-io.on("connection", function (socket) {
-  socket.on('channel-join', ()=>{
-    console.log('channel join', id);
-  });
-});
+var i = 0;
+// io.on("connection", function (socket) {
+//   console.log("connected"+ i++);
+//   // socket.on('channel-join', ()=>{
+//   //   console.log('channel join', id);
+//   // });
+// });
 

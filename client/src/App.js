@@ -1,7 +1,7 @@
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import socketClient from 'socket.io-client';
+import socketIOClient from 'socket.io-client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/Login.css';
 import './styles/Register.css';
