@@ -5,6 +5,9 @@ import Board from './Board'; //Import board class
 import Dice from "../images/dice.png";
 import socketClient from 'socket.io-client'; //Import socket client library
 import io from 'socket.io-client';
+
+
+import UserContainer from './UserContainer/UserContainer'; //Import user container
 /*
 Vien Nguyen
 CST-452 Senior Project II
@@ -18,20 +21,47 @@ const Game = () => {
   //Declare the board game
   var board = new Board();
   //Declare the componant variable
+ 
   const [canvas, setCanvas] = useState('');
   const [diceValue, setDiceValue] = useState(10);
   const ENDPOINT = 'localhost:5000';
+  let data = sessionStorage.getItem('mySessionStorageData');
+        data = JSON.parse(data);
+        console.log(data.firstName);
+  const [name, setName] = useState(data.firstName);
+  const [room,setRoom] = useState('nguyen');
+  const [users, setUsers] = useState('');
+  const [eastPlayer, setEastPlayer] = useState('');
+  const [sourthPlayer, setSourthPlayer] = useState('');
+  const [westPlayer, setWestPlayer] = useState('');
+  const [northPlayer, setNorthPlayer] = useState('');
+  const [numberPlayers, setNumberPlayers] = useState('');
+
   //Initiate the board game interface
   useEffect(() => {
     setCanvas(initCanvas());
+  
+    //setName(data.firstName);
   }, []);
 
   useEffect(()=>{
     //Get the name and room from the url passing to the constructor 
     socket = io(ENDPOINT);
-    socket.emit('join',()=>{
+    //Get in the room game with player name and room
+    socket.emit('join',{name,room},()=>{
+     
     });
     },[]);
+
+    useEffect(() =>{
+      socket.on("roomData", ({ users }) => {
+          setUsers(users);
+          if(users.length == 4){
+            //console.log(users.length);
+            
+          }
+        });
+  },[]);
   //Initiate the game interface method
   const initCanvas = () => (
     new fabric.Canvas('canvas', {
@@ -81,7 +111,7 @@ const Game = () => {
                     canvi.renderAll();
                     img1.animate('top', x.top + topPosition,{
                       onChange: canvi.renderAll.bind(canvi),
-                      duration:4000
+                      duration:2000
                     })
                     if(leftPosition == 720){
                       leftPosition = 80;
@@ -100,12 +130,12 @@ const Game = () => {
   const rollDice = () =>(
     setDiceValue(80),
     socket.emit('channel-join')
-    
   )
   //Render the game interface
   return(
     <div>
       <h1>Mahjong Table</h1>
+      <UserContainer users={users}/>
       <canvas id="canvas" />
       <button onClick={()=> loadMahjongSet(canvas)}>
         Load Mahjong Set
