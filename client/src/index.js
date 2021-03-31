@@ -5,11 +5,17 @@ import './index.css';
 import App from './App';
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
+import { stopReportingRuntimeErrors } from "react-error-overlay";
+
+
 
 
 import Login from './components/Login';
 import Register from './components/Register';
 
+if (process.env.NODE_ENV === "development") {
+  stopReportingRuntimeErrors(); // disables error overlays
+}
 // //Import register component
 // const RegisterForm = () => 
 // <div className="Register">

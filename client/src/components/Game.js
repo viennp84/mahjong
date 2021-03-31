@@ -3,11 +3,11 @@ import { fabric } from 'fabric'; //Import fabricjs library
 import Tile from './Tile'; //Import Tile class
 import Board from './Board'; //Import board class
 import Dice from "../images/dice.png";
-import socketClient from 'socket.io-client'; //Import socket client library
 import io from 'socket.io-client';
 
 
 import UserContainer from './UserContainer/UserContainer'; //Import user container
+let socket;
 /*
 Vien Nguyen
 CST-452 Senior Project II
@@ -27,41 +27,20 @@ const Game = () => {
   const ENDPOINT = 'localhost:5000';
   let data = sessionStorage.getItem('mySessionStorageData');
         data = JSON.parse(data);
-        console.log(data.firstName);
   const [name, setName] = useState(data.firstName);
   const [room,setRoom] = useState('nguyen');
-  const [users, setUsers] = useState('');
+  const [users, setUsers] = useState([]);
   const [eastPlayer, setEastPlayer] = useState('');
   const [sourthPlayer, setSourthPlayer] = useState('');
   const [westPlayer, setWestPlayer] = useState('');
   const [northPlayer, setNorthPlayer] = useState('');
   const [numberPlayers, setNumberPlayers] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [eastPlayerDice, setEastPlayerDice] = useState('3');
+  const [sourthPlayerDice, setSourthPlayerDice] = useState('');
+  const [westPlayerDice, setWestPlayerDice] = useState('');
+  const [northPlayerDice, setNorthPlayerDice] = useState('');
 
-  //Initiate the board game interface
-  useEffect(() => {
-    setCanvas(initCanvas());
-  
-    //setName(data.firstName);
-  }, []);
-
-  useEffect(()=>{
-    //Get the name and room from the url passing to the constructor 
-    socket = io(ENDPOINT);
-    //Get in the room game with player name and room
-    socket.emit('join',{name,room},()=>{
-     
-    });
-    },[]);
-
-    useEffect(() =>{
-      socket.on("roomData", ({ users }) => {
-          setUsers(users);
-          if(users.length == 4){
-            //console.log(users.length);
-            
-          }
-        });
-  },[]);
   //Initiate the game interface method
   const initCanvas = () => (
     new fabric.Canvas('canvas', {
@@ -69,7 +48,68 @@ const Game = () => {
       width: 800,
       backgroundColor: 'lightgreen'
     })
-  )
+  );
+  //Initiate the board game interface
+  useEffect(() => {
+    setCanvas(initCanvas());
+        //Get the name and room from the url passing to the constructor 
+        socket = io(ENDPOINT);
+        //Get in the room game with player name and room
+        socket.emit('join',{name,room},()=>{});
+  }, []);
+
+  useEffect(()=>{
+    return () => {
+      socket.emit('disconnect');
+      socket.off();
+    };
+  },[ENDPOINT]);
+
+  useEffect(() =>{
+      socket.on("roomData", ({ users }) => {
+          setUsers(users);
+          setNumberPlayers();
+          if(numberPlayers == 4){
+            setNumberPlayers = 4;
+          }
+        });
+      socket.on("showrolldice", ({users}) => {
+        console.log(users);
+        setUsers(users);
+        if(users[0].playPosition === 1){
+          markEastPlayer(canvas);
+        }
+        if(users[1].playPosition === 2){
+          markSorthPlayer(canvas);
+        }
+        if(users[2].playPosition === 3){
+          markWestPlayer(canvas);
+        }
+        if(users[3].playPosition === 4){
+          markNorthPlayer(canvas);
+        }
+        // console.log(canvas);
+        // loadDiceSet(canvas);
+        // loadMahjongSet(canvas);
+        // markEastPlayer(canvas);
+        // markSorthPlayer(canvas);
+        // markWestPlayer(canvas);
+        // markNorthPlayer(canvas);
+      });
+      socket.on("showMahjongSet", () => {
+      loadMahjongSet(canvas);
+      });
+
+      
+  },[numberPlayers]);
+
+
+
+  const rollDice = () =>(
+    socket.emit("rolldice",()=>{
+    })
+  );
+
   //Load the dice and display them into the canvas mahjong board
   //Calling the dice API service 
   const loadDiceSet = canvi =>{
@@ -81,6 +121,7 @@ const Game = () => {
           var topPosition = 550; //Set the right position for the dice
           result.data.result.map( //Loop all the tiles to display
             x => fabric.Image.fromURL(Dice, function(myImg) {
+              canvi.renderAll(); //Update the canvas
               //i create an extra var for to change some image properties
               var img1 = myImg.set({ left: leftPosition, top: topPosition ,width:504,height:486});
               canvi.add(img1); //Add the dice into the board game
@@ -90,7 +131,57 @@ const Game = () => {
           );
         },
     )
+  };
+
+  const markEastPlayer = canvi =>{
+    fabric.Image.fromURL(Dice, function(myImg) {
+      canvi.renderAll(); //Update the canvas
+      //i create an extra var for to change some image properties
+      var img1 = myImg.set({ left: 50, top: 560 ,width:504,height:486});
+      canvi.add(img1); //Add the dice into the board game
+      img1.scaleToWidth(40); //Scale down the dice size
+       //Update the dice position
+    })
   }
+  const markSorthPlayer = canvi =>{
+    fabric.Image.fromURL(Dice, function(myImg) {
+      canvi.renderAll(); //Update the canvas
+      //i create an extra var for to change some image properties
+      var img1 = myImg.set({ left: 750, top: 460 ,width:504,height:486});
+      canvi.add(img1); //Add the dice into the board game
+      img1.scaleToWidth(40); //Scale down the dice size
+       //Update the dice position
+    })
+  }
+
+  const markWestPlayer = canvi =>{
+    fabric.Image.fromURL(Dice, function(myImg) {
+      canvi.renderAll(); //Update the canvas
+      //i create an extra var for to change some image properties
+      var img1 = myImg.set({ left: 700, top: 30 ,width:504,height:486});
+      canvi.add(img1); //Add the dice into the board game
+      img1.scaleToWidth(40); //Scale down the dice size
+       //Update the dice position
+    })
+  }
+
+  const markNorthPlayer = canvi =>{
+    fabric.Image.fromURL(Dice, function(myImg) {
+      canvi.renderAll(); //Update the canvas
+      //i create an extra var for to change some image properties
+      var img1 = myImg.set({ left: 20, top: 90 ,width:504,height:486});
+      canvi.add(img1); //Add the dice into the board game
+      img1.scaleToWidth(40); //Scale down the dice size
+       //Update the dice position
+    })
+  }
+
+  const showMahjongSet = () =>(
+    socket.emit("loadMahjongSet",()=>{
+    })
+  );
+
+
   //Load the mahong set and display the tiles into the game board
   //Calling the getAllMahjongTile from API service
   const loadMahjongSet = canvi => {
@@ -122,22 +213,15 @@ const Game = () => {
                 },
             )
   }
-  //Socket IO server address
-  const SERVER = "http://127.0.0.1:3001";
-  //Render the home page from the home component
-  var socket = socketClient(SERVER);
-  //Rolling the dice (testing feature)
-  const rollDice = () =>(
-    setDiceValue(80),
-    socket.emit('channel-join')
-  )
+
   //Render the game interface
   return(
     <div>
       <h1>Mahjong Table</h1>
       <UserContainer users={users}/>
+      {/* <label>Player: {eastPlayer} dice result: {eastPlayerDice}</label> */}
       <canvas id="canvas" />
-      <button onClick={()=> loadMahjongSet(canvas)}>
+      <button onClick={()=> showMahjongSet(canvas)}>
         Load Mahjong Set
       </button>
       <button onClick={()=> loadDiceSet(canvas)}>
