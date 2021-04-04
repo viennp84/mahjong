@@ -13,8 +13,10 @@ io.on('connection',(socket)=>{
     socket.on('join',({name, room}, callback) =>{
         //Set the user in to the user list
         const {error, user } = addUser({id: socket.id, name, room });
-        socket.join(user.room);
-        io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room)});
+        //socket.join(user.room);
+        socket.join('nguyen');
+        //io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room)});
+        io.to('nguyen').emit('roomData', { room: user.room, users: getUsersInRoom(user.room)});
         callback();
 
     });
@@ -37,6 +39,10 @@ io.on('connection',(socket)=>{
     socket.on('loadMahjongSet',()=>{
         io.to('nguyen').emit("showMahjongSet");
     });
+    socket.on('tilemove',({tileid, tileX, tileY, tileOnUser})=>{
+        console.log(tileid);
+        io.to('nguyen').emit("movingtile",{tileid, tileX, tileY, tileOnUser});
+    });
 
     // socket.on('assignDealer',({users})=>{
     //     console.log('assignDealer');
@@ -49,5 +55,7 @@ io.on('connection',(socket)=>{
         io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room)});
         }
     })
+
+    
 });
 server.listen(PORT, ()=> console.log(`Server has started on port ${PORT}`));

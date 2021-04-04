@@ -44,7 +44,7 @@ const Game = () => {
   //Initiate the game interface method
   const initCanvas = () => (
     new fabric.Canvas('canvas', {
-      height: 600,
+      height: 600,  
       width: 800,
       backgroundColor: 'lightgreen'
     })
@@ -76,20 +76,20 @@ const Game = () => {
       socket.on("showrolldice", ({users}) => {
         console.log(users);
         setUsers(users);
-        if(users[0].playPosition === 1){
-          markEastPlayer(canvas);
-        }
-        if(users[1].playPosition === 2){
-          markSorthPlayer(canvas);
-        }
-        if(users[2].playPosition === 3){
-          markWestPlayer(canvas);
-        }
-        if(users[3].playPosition === 4){
-          markNorthPlayer(canvas);
-        }
+        // if(users[0].playPosition === 1){
+        //   markEastPlayer(canvas);
+        // }
+        // if(users[1].playPosition === 2){
+        //   markSorthPlayer(canvas);
+        // }
+        // if(users[2].playPosition === 3){
+        //   markWestPlayer(canvas);
+        // }
+        // if(users[3].playPosition === 4){
+        //   markNorthPlayer(canvas);
+        // }
         // console.log(canvas);
-        // loadDiceSet(canvas);
+        loadDiceSet(canvas);
         // loadMahjongSet(canvas);
         // markEastPlayer(canvas);
         // markSorthPlayer(canvas);
@@ -97,13 +97,29 @@ const Game = () => {
         // markNorthPlayer(canvas);
       });
       socket.on("showMahjongSet", () => {
-      loadMahjongSet(canvas);
+        loadMahjongSet(canvas);
       });
-
-      
+      socket.on("movingtile", ({tileid, tileX, tileY, tileOnUser}) => {
+        console.log(tileid);
+        console.log(tileX);
+        console.log(tileY);
+        console.log('It is on: ' + tileOnUser);
+        console.log('tile is moving');
+       
+      var tiles = canvas._objects;
+      console.log(name);
+        if(undefined !==tiles && tileOnUser !== name){
+          console.log(tiles);
+          tiles.forEach(element => {
+            if(element.id === tileid){
+              element.top = tileY;
+              element.left = tileX;
+            }
+          });
+          canvas.renderAll();
+        } 
+      });
   },[numberPlayers]);
-
-
 
   const rollDice = () =>(
     socket.emit("rolldice",()=>{
@@ -194,16 +210,52 @@ const Game = () => {
                   canvi.renderAll(); //Update the canvas
                   result.data.result.map( //Loop through all the tiles 
                     x => fabric.Image.fromURL(x.tileImage, function(myImg) {
+                      console.log(x.id);
                       //i create an extra var for to change tile properties
-                      var img1 = myImg.set({ left: leftPosition, top: 0 ,width:100,height:100});
+                      var img1 = myImg.set({id: x.id, left: leftPosition, top: 0 ,width:100,height:100});
                       canvi.add(img1); //Add tile to the board game
+                      console.log(img1);
                       img1.scaleToWidth(50); //Scale down the tile size
                     console.log(leftPosition+=40)
                     canvi.renderAll();
                     img1.animate('top', x.top + topPosition,{
                       onChange: canvi.renderAll.bind(canvi),
-                      duration:2000
+                      duration:1000
                     })
+                    //Event select an object
+                    img1.on('selected', function() {
+                      console.log('selected a circle');
+                      console.log(img1);
+                      img1.scaleToWidth(100);
+                      // socket.emit("rolldice",()=>{
+                      // })
+                    });
+                    img1.on('deselected', function() {
+                      console.log(' unselected ');
+                      console.log(img1);
+                      img1.scaleToWidth(50);
+                      // socket.emit("rolldice",()=>{
+                      // })
+                    });
+                    // canvas.on('mouse:down', function(img1) {
+                    //   if (img1.target) {
+                    //     console.log('an object was clicked! ', img1.target.type);
+                    //   }
+                    // });
+                    img1.on('moving', function() {
+                     var tileid = img1.id;
+                     var tileX = img1.left;
+                     var tileY = img1.top;
+                     var tileOnUser = name;
+                      //console.log(img1.top + " " + img1.left);
+                      socket.emit('tilemove',{tileid, tileX, tileY, tileOnUser},()=>{});
+                      console.log(tileid);
+                    });
+
+                    // img1.on('modified', function() {
+                    //   img1.scaleToWidth(100);
+                    // });
+
                     if(leftPosition == 720){
                       leftPosition = 80;
                       topPosition +=60

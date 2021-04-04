@@ -12,12 +12,6 @@ const UserContainer = ({ users }) => (
               <div>
                 <div className="activeContainer">
                   <h2>
-                    {/* {users.map(({name}) => (
-                      <div key={name} className="activeItem">
-                        {name}
-                        <img alt="Online Icon" src={onlineIcon}/>
-                      </div>
-                    ))} */}
                     {users.map(item => (
                       <div key={item.id} className="activeItem">
                         <img alt="Online Icon" src={onlineIcon}/>
