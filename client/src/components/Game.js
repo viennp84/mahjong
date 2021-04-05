@@ -6,6 +6,7 @@ import Dice from "../images/dice.png";
 import io from 'socket.io-client';
 
 
+
 import UserContainer from './UserContainer/UserContainer'; //Import user container
 let socket;
 /*
@@ -74,7 +75,6 @@ const Game = () => {
           }
         });
       socket.on("showrolldice", ({users}) => {
-        console.log(users);
         setUsers(users);
         // if(users[0].playPosition === 1){
         //   markEastPlayer(canvas);
@@ -88,7 +88,7 @@ const Game = () => {
         // if(users[3].playPosition === 4){
         //   markNorthPlayer(canvas);
         // }
-        // console.log(canvas);
+
         loadDiceSet(canvas);
         // loadMahjongSet(canvas);
         // markEastPlayer(canvas);
@@ -234,8 +234,6 @@ const Game = () => {
                       console.log(' unselected ');
                       console.log(img1);
                       img1.scaleToWidth(50);
-                      // socket.emit("rolldice",()=>{
-                      // })
                     });
                     // canvas.on('mouse:down', function(img1) {
                     //   if (img1.target) {
@@ -251,10 +249,6 @@ const Game = () => {
                       socket.emit('tilemove',{tileid, tileX, tileY, tileOnUser},()=>{});
                       console.log(tileid);
                     });
-
-                    // img1.on('modified', function() {
-                    //   img1.scaleToWidth(100);
-                    // });
 
                     if(leftPosition == 720){
                       leftPosition = 80;

@@ -13,8 +13,8 @@ var user= require('../models/user')
 const Nylas = require('nylas');
  
 Nylas.config({
-  clientId: '4zp9e9e81xbehojanc35bq3ye',
-  clientSecret: '230ea1pz1xjzyektxfsmallvg',
+  clientId: 'a99j160a1ljrkqzyoniepby5m',
+  clientSecret: 'anwbglb30gg8q36riits3s1j6',
 });
 
 
@@ -70,11 +70,11 @@ module.exports.register = function (req, res) {
                     });
                   console.log("User Id:- " + result.insertId);
                   console.log(activationCode);
-                    const nylas = Nylas.with('yBreaX0TbNkzx5ed6MN8igvljQZDfi');
+                    const nylas = Nylas.with('ko6HJh3damo7ZJC4IBBX8wLpOOFl9V');
                     const draft = nylas.drafts.build({
                       subject: 'Mahjong Account Activation Code',
                       to: [{ name: firstname, email: email }],
-                      body: 'Hi, ' + firstname + '. Thank you for signing up with Mahong game. Please use this code: ' + activationCode + 'and User ID: ' + result.insertId + ' to activate your account'
+                      body: 'Hi, ' + firstname + '. Thank you for signing up with Mahong game. Please use this code: ' + activationCode + ' and User ID: ' + result.insertId + ' to activate your account'
                     });
                     // Send the draft
                     draft.send().then(message => {
@@ -237,7 +237,7 @@ module.exports.updateProfile = function (req, res) {
   const phone = req.body.user.phone;
   //Create sql query to update the user profile
   db.query("UPDATE users SET firstname = ?, lastname = ?, email = ?, phone = ? WHERE userId = ?", [firstname, lastname, email, phone, userId], (err, result) => {
-    //console.log(result);
+    console.log(result);
   });
   res.send({
     message: {
@@ -354,7 +354,7 @@ module.exports.inviteFriend = function (req, res) {
                 res.send({ err: err })
               }else{
                 //Send the invitation via email
-                const nylas = Nylas.with('yBreaX0TbNkzx5ed6MN8igvljQZDfi');
+                const nylas = Nylas.with('ko6HJh3damo7ZJC4IBBX8wLpOOFl9V');
                 const draft = nylas.drafts.build({
                   subject: 'Mahjong Game. Hi, my name is: ' + JSON.parse(req.body.invitation.sender).firstname,
                   to: [{ name: 'Friend', email:  inviteEmail}],
