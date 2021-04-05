@@ -1,3 +1,3 @@
 ## Mahjong Game Online
-#Author:
+# Author:
 <p>Vien Nguyen</p>
