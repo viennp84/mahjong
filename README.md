@@ -16,3 +16,13 @@ Mahjong game online is purposely created to provide a better condition for the m
 <p>The administrator can view the report on the number of users, activated users, un-activated users, searching for a specific user, or removing a user.</p>
 <p>The admin user can update his own password.</p>
 <p>All users are accessible to the mahjong game.</p>
+# None-functional requirements:
+<p>
+  Non-functional requirements are constraints on the application or offered by the system. The Mahjong game web app is offering compatibility as a non-functional requirement.
+	Goal:
+- The mahjong game application can work on different web browsers: Internet Explorer, Chrome, Firefox.
+- The mahjong game application is accessible to different kinds of machines: computer, mobile phone, tablet.
+- The mahjong game application does support the Rest APIs that the third party can connect to the web service.
+Impact:
+- The mahjong game has sacrificed the interactive design to be able to compatibly work with different devices. Less animation, screen touch, drag, and drop.
+- Loss functionalities. </p>
