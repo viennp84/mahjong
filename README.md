@@ -25,3 +25,9 @@ Goal:
 Impact:
 - The mahjong game has sacrificed the interactive design to be able to compatibly work with different devices. Less animation, screen touch, drag, and drop.
 - Loss functionalities. </p>
+# Technology:
+<p>The mahjong game web application can be implemented from different programming technologies like PHP, Java, C# that I have experienced with. However, I would like to step out of the comfort zone to create a product with newer technologies that require a lot of self-learning and research. React.js 17.0.2, Nodejs 14.15.1, Fabric.js 4.3.3, MySQL 5.7 are the major tools used in implementing this application. 
+React.js is responsible for the front-end processes that features are developed in reusable components. With React.js, I can flexibly write HTML and JavaScript together.
+This is an open-source framework widely used in the web developing community that will benefit if technical issues arise during the development, I could have supports from the community.
+Node.js is accountable for the business at the backend. This is another open-source tool that works as JavaScript Webserver. It allows a Web socket application to be quickly developed. Node.js fits in the circumstance of building a mahjong online game because it offers connectivity between separating users. </p>
+<p>The best practices for this application are simplest the design and business processes. The idea is reducing the amount of code by reusing available components and available libraries. Avoiding creates features that are already developed and used on the software industry. Each component is clearly defined for the special tasks that are not overlap on other components. Before starting a new task, the previous task must be on resolved status and completely closed to make sure all features fully developed. After testing the separated component, the application is integrated testing components to make sure they all collaborate together as expected.</p>
