@@ -40,5 +40,19 @@ I have learned how to build a single page application using React.js that the we
 Setting up the environment for a React.js application is simple using the command line. However, the developer can modify the provided components to fit in their application structure.
 In this project, I learned to code the client-side and server-side in two different servers and used the customed APIs and third-party API. Also, I have been learning how to integrate the libraries from the different frameworks to create my game features. For example, I have created the game server using socket.io to link the multiple front ends' communications, sending data from one to another. Using Fabric.js library to generate the game table and mahjong set, handling the interaction on the game table so that the game indicates the current status.
 I decided to use JavaScript libraries in building the game interface instead of using a game engine because they are well supported on the web platform. I properly get improved in coding JavaScript in React.js and Node.js. I am evaluating JavaScript as the future when this language can be used to do programming at the front end, back end, cross platforms for web applications, mobile applications.</p>
+<p>The technical approach is to guarantee the necessary features are implemented correctly. Using the right tools and suitable technical design to do things the right way.
+In this project, the goal is to create a mahjong game on a website where users can interact in real-time with other users. So, the system will have a client-server with a game engine and real-time connection.</p>
+
+<p>Create a mahjong game online is a handful of risks and challenges. 
+
+Applying new technologies that demand self-learning is a risk as it is time-consuming and practices on the tutorials. I spent days learning React.js on particular examples that need to be customized to complete the project's tasks. React manages the data on the website constantly. If an object changes, the components are also changed. This advanced feature makes it the project hard to control the logic when the features grew. 
+
+I had an issue working with the socket.io library on React.js and Node.js when they were not cooperated due to version differences. I tried to install several released versions to find out the suitable one.
+
+Fabric.js is one of the most challenging graphic tools that I had to deal with to display the tile objects onto the screen. Each tile will have a coordinated position on the screen. 
+Whenever the object is modified, it must be notified for updating on other screens. For the mahjong table, 4 players are located at 4 sides. The game must display 4 ways of showing the tiles, which depend on the player positions. Before the position problems are solved, I have to learn more about the Fabric object events document on http://fabricjs.com/.
+	If Fabric.js is not fully supporting the mahjong game, HTML tags and JavaScript methods might support the missing features.</p>
+  
+  <p>Currently, the game needs a converter for the view angle corresponding to different players. All players will see themselves at the bottom side of the game table. However, they will see their partners on three other sides. The front end must intellectually recognize the players to display correct data and graphics.</p>
 
 
